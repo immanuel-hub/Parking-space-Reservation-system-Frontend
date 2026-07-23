@@ -31,3 +31,7 @@ export default function ReservationHistoryPage() {
     </div>
   );
 }
+const cancelReservation = async (reservationId) => {
+  await axiosClient.delete(`/reservations/${reservationId}/`);
+  
+};

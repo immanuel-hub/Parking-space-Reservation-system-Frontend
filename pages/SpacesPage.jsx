@@ -27,3 +27,11 @@ export default function SpacesPage() {
     </div>
   );
 }
+const reserveSpace = async (spaceId) => {
+  await axiosClient.post('/reservations/', {
+    vehicle: 1,
+    space: spaceId,
+    start_time: '2026-08-01T09:00:00Z',
+    end_time: '2026-08-01T12:00:00Z',
+  });
+};
