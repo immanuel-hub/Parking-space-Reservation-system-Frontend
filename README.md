@@ -1,16 +1,20 @@
-# React + Vite
+# Parking Space Reservation System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React frontend for registering users, browsing parking spaces, and managing reservations.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Install the dependencies and start the development server:
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The frontend expects the reservation API at `http://localhost:8000/api` by default. Set `VITE_API_BASE_URL` when the API is hosted elsewhere.
 
-## Expanding the ESLint configuration
+## Available commands
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `npm run dev` starts the local development server.
+- `npm run build` creates a production build.
+- `npm run lint` checks the source files with ESLint.

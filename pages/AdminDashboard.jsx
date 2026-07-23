@@ -4,43 +4,116 @@ import axiosClient from '../api/axiosClient';
 export default function AdminDashboard() {
   const [spaces, setSpaces] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [error, setError] = useState('');
+  const [newSpaceNumber, setNewSpaceNumber] = useState('');
 
-  useEffect(() => {
-    async function loadData() {
+  const loadData = async () => {
+    try {
       const [spacesRes, reservationsRes] = await Promise.all([
         axiosClient.get('/parking-spaces/'),
         axiosClient.get('/reservations/'),
       ]);
       setSpaces(spacesRes.data);
       setReservations(reservationsRes.data);
+    } catch {
+      setError('Failed to load admin data.');
     }
+  };
+
+  useEffect(() => {
     loadData();
   }, []);
 
-  return (
-    <div>
-      <h1>Admin Dashboard</h1>
+  const createSpace = async () => {
+    try {
+      await axiosClient.post('/parking-spaces/', {
+        parking_lot: 1,
+        space_number: Number(newSpaceNumber),
+        status: 'available',
+      });
+      setNewSpaceNumber('');
+      loadData();
+    } catch {
+      setError('Failed to create parking space.');
+    }
+  };
 
-      <section>
-        <h2>Parking Spaces</h2>
-        {spaces.map((space) => (
-          <div key={space.id} style={{ border: '1px solid #ddd', padding: '10px', marginBottom: '10px' }}>
-            <p>Space #{space.space_number}</p>
-            <p>Status: {space.status}</p>
-          </div>
-        ))}
+  const deleteSpace = async (spaceId) => {
+    try {
+      await axiosClient.delete(`/parking-spaces/${spaceId}/`);
+      loadData();
+    } catch {
+      setError('Failed to delete parking space.');
+    }
+  };
+
+  const completeReservation = async (reservationId) => {
+    try {
+      await axiosClient.patch(`/reservations/${reservationId}/`, { status: 'completed' });
+      loadData();
+    } catch {
+      setError('Failed to update reservation status.');
+    }
+  };
+
+  return (
+    <div className="page-card">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Admin Dashboard</h1>
+          <p className="page-subtitle">Manage parking spaces and reservations.</p>
+        </div>
+      </div>
+      {error && <p className="error-text">{error}</p>}
+
+      <section className="card">
+        <h2>Create Parking Space</h2>
+        <div className="form-grid">
+          <label>
+            Space number
+            <input
+              type="number"
+              placeholder="Space number"
+              value={newSpaceNumber}
+              onChange={(e) => setNewSpaceNumber(e.target.value)}
+            />
+          </label>
+          <button className="button button-full" onClick={createSpace}>Create Space</button>
+        </div>
       </section>
 
-      <section>
+      <section className="card">
+        <h2>Parking Spaces</h2>
+        <div className="card-list">
+          {spaces.map((space) => (
+            <div key={space.id} className="card">
+              <p><strong>Space #{space.space_number}</strong></p>
+              <p>Status: <span className="status-chip">{space.status}</span></p>
+              <button className="button-secondary button-full" onClick={() => deleteSpace(space.id)}>
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="card">
         <h2>Reservations</h2>
-        {reservations.map((reservation) => (
-          <div key={reservation.id} style={{ border: '1px solid #ddd', padding: '10px', marginBottom: '10px' }}>
-            <p>Reservation #{reservation.id}</p>
-            <p>User: {reservation.user}</p>
-            <p>Space: {reservation.space}</p>
-            <p>Status: {reservation.status}</p>
-          </div>
-        ))}
+        <div className="card-list">
+          {reservations.map((reservation) => (
+            <div key={reservation.id} className="card">
+              <p><strong>Reservation #{reservation.id}</strong></p>
+              <p>User: {reservation.user}</p>
+              <p>Space: {reservation.space}</p>
+              <p>Status: <span className="status-chip">{reservation.status}</span></p>
+              {reservation.status === 'booked' && (
+                <button className="button button-full" onClick={() => completeReservation(reservation.id)}>
+                  Mark Completed
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );

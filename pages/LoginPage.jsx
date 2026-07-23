@@ -20,13 +20,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-        <button type="submit">Login</button>
+    <div className="page-card">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Login</h1>
+          <p className="page-subtitle">Use your account to reserve parking.</p>
+        </div>
+      </div>
+      {error && <p className="error-text">{error}</p>}
+      <form className="form-grid" onSubmit={handleSubmit}>
+        <label>
+          Username
+          <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
+        </label>
+        <label>
+          Password
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+        </label>
+        <button className="button button-full" type="submit">Login</button>
       </form>
     </div>
   );

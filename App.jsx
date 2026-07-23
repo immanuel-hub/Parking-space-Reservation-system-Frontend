@@ -11,16 +11,18 @@ import AdminDashboard from './pages/AdminDashboard';
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/spaces" element={<ProtectedRoute><SpacesPage /></ProtectedRoute>} />
-          <Route path="/history" element={<ProtectedRoute><ReservationHistoryPage /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        </Routes>
-      </BrowserRouter>
+      <div className="app-shell">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/spaces" element={<ProtectedRoute><SpacesPage /></ProtectedRoute>} />
+            <Route path="/history" element={<ProtectedRoute><ReservationHistoryPage /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </AuthProvider>
   );
 }
